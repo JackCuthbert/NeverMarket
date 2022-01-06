@@ -8,7 +8,7 @@ const SRC_DIR_NAME = 'src';
 module.exports = {
   entry: {
     popup: path.join(__dirname, `../${SRC_DIR_NAME}/popup.ts`),
-    content: path.join(__dirname, `../${SRC_DIR_NAME}/content/${browser}/content.ts`),
+    'content_scripts/woolworths': path.join(__dirname, `../${SRC_DIR_NAME}/content/woolworths.ts`),
   },
   output: {
     path: path.join(__dirname, `../${BUILD_DIR_NAME}`),

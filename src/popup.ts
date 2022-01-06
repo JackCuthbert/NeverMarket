@@ -1,3 +1,3 @@
-import { App } from './lib/app';
+import { App } from './lib/popup/app';
 
 new App().render();

@@ -1,6 +1,6 @@
 import sinon from 'sinon';
-import { App } from '../lib/app';
-import * as Dom from '../lib/dom';
+import { App } from '../lib/popup/app';
+import * as Dom from '../lib/popup/dom';
 
 describe('testing App', () => {
   let sandboxes;

@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import { getDisplayDateTime, getPeriod, getPalette } from '../lib/utils';
+import { getDisplayDateTime, getPeriod, getPalette } from '../lib/popup/utils';
 
 describe('testing utils', () => {
   let sandboxes;

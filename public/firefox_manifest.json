@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.woolworths.com.au/shop/search/*"],
-      "js": ["content.js"]
+      "js": ["content_scripts/woolworths.js"]
     }
   ],
   "icons": {

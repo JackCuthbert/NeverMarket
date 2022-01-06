@@ -2,6 +2,11 @@
   "compilerOptions": {
     "module": "ES6",
     "target": "es6",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "es2019"
+    ],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noImplicitAny": false,

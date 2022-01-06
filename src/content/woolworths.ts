@@ -1,5 +1,8 @@
 /// <reference types="web-ext-types"/>
 
+import { observeRootElement } from '../lib/observer';
+import { hideElement } from '../lib/dom';
+
 const genericTileNodeName = 'SHARED-PRODUCT-TILE';
 const genericTileElementName = 'shared-product-tile';
 const marketBadgeSelector = '[alt="Everyday Market Product"]';
@@ -9,7 +12,7 @@ function isNodeComment(node: Node): boolean {
 }
 
 /** Callback to handle changes to the DOM to continue nuking market tiles */
-const callback: MutationCallback = (mutations) => {
+const handleMutations: MutationCallback = (mutations) => {
   for (const mutation of mutations) {
     // Child list changes only
     if (mutation.type != 'childList') continue;
@@ -19,14 +22,13 @@ const callback: MutationCallback = (mutations) => {
     const node = mutation.addedNodes[0];
 
     // Not comments
-    const isComment = isNodeComment(node);
-    if (isComment) continue;
+    if (isNodeComment(node)) continue;
 
     // Only product tiles
     if (node.nodeName !== genericTileNodeName) continue;
 
     // Coerce into HTMLElement
-    if (node.firstChild.nodeType !== 1) continue;
+    if (node.firstChild.nodeType !== Node.ELEMENT_NODE) continue;
     const htmlElement = node.firstChild as HTMLElement;
 
     // Ignore unavailable items
@@ -37,8 +39,7 @@ const callback: MutationCallback = (mutations) => {
     if (badge == null) continue;
 
     // yeet the market tile
-    node.parentElement.remove();
-    htmlElement.style.backgroundColor = 'red';
+    hideElement(node.parentElement);
   }
 };
 
@@ -50,30 +51,8 @@ function removeMarketTiles() {
     const badge = tile.querySelector(marketBadgeSelector);
     if (badge == null) continue;
 
-    tile.parentElement.remove();
+    hideElement(tile.parentElement);
   }
 }
 
-const tileObserver = new MutationObserver(callback);
-
-let rootElementTimer = null;
-let targetNode = null;
-
-const config = { attributes: true, childList: true, subtree: true };
-
-rootElementTimer = setInterval(() => {
-  targetNode = document.querySelector('#center-panel');
-
-  if (targetNode != null) {
-    // Found root element, start the observer
-    tileObserver.observe(targetNode, config);
-
-    // Manually clear all the market tiles
-    removeMarketTiles();
-
-    // Cancel the interval
-    clearInterval(rootElementTimer);
-  } else {
-    tileObserver.disconnect();
-  }
-}, 100);
+observeRootElement('#center-panel', handleMutations, removeMarketTiles);
